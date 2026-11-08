@@ -1,0 +1,9 @@
+*.apk
+*.idsig
+*.jks
+*.keystore
+*.tzst
+__pycache__/
+port/build/
+port/game/
+port/dist/

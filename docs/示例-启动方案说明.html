@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>暗黑破坏神II 1.13c 中文版 · 安卓专用 APK 使用说明</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2230;--sub:#5b6577;--line:#e3e7ee;--accent:#8c2b22;--accent2:#b8863b;--ok:#1d7a4d;--warn:#b5651d}
+*{box-sizing:border-box}
+body{margin:0;padding:32px 20px 64px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:27px;margin:0 0 6px;letter-spacing:.5px}
+.lead{color:var(--sub);margin:0 0 26px;font-size:14px}
+h2{font-size:19px;margin:34px 0 12px;padding-left:11px;border-left:4px solid var(--accent)}
+h3{font-size:16px;margin:22px 0 8px;color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:12px 0;box-shadow:0 1px 3px rgba(20,30,50,.04)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f2f6;font-weight:600;white-space:nowrap}
+tr:nth-child(even) td{background:#fbfcfd}
+code{background:#f0f2f6;border:1px solid var(--line);border-radius:4px;padding:1px 6px;font:13px/1.5 Consolas,monospace;color:#7a241d}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600;margin-right:6px}
+.t-ok{background:#e6f4ec;color:var(--ok)}.t-warn{background:#fbeee0;color:var(--warn)}.t-red{background:#f8e8e6;color:var(--accent)}
+ol,ul{padding-left:22px;margin:8px 0}li{margin:5px 0}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:8px 0}
+.kv div{background:#f8f9fb;border:1px solid var(--line);border-radius:7px;padding:10px 13px}
+.kv b{display:block;color:var(--sub);font-size:12px;font-weight:500;margin-bottom:3px}
+.note{background:#fff8ec;border:1px solid #f0dcb8;border-left:4px solid var(--warn);border-radius:7px;padding:12px 16px;margin:12px 0;font-size:14px}
+.danger{background:#fdf0ef;border:1px solid #f0cfcc;border-left:4px solid var(--accent);border-radius:7px;padding:12px 16px;margin:12px 0;font-size:14px}
+footer{margin-top:40px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>暗黑破坏神II 1.13c 中文版 · 安卓专用 APK</h1>
+<p class="lead">基于 Winlator 11.2.0 改造的专用客户端 · 内置 Wine / Box64 运行环境 · <b>全中文界面</b> · <b>v4 修复版（预置 Blizzard 注册表 + 无空格游戏路径 + 5 套启动方案）</b> · 2026-11-08</p>
+
+<div class="card">
+<div class="kv">
+  <div><b>源游戏目录</b>D:\3DMGAME_DiabloII.V1.13C.CHS.Green\Diablo II原始\Diablo II</div>
+  <div><b>游戏版本</b>1.13c 中文版 + 毁灭之王</div>
+  <div><b>运行原理</b>APK 内置 Windows 兼容层（非原生重编译）</div>
+  <div><b>精简后本体</b>508 个文件 / 1062 MB</div>
+</div>
+</div>
+
+<div class="danger"><b>⚠ 从旧版升级到 v4，必须删掉旧容器重建。</b><br>
+容器模板只在「新建容器」那一刻展开，覆盖安装 APK <b>不会</b>修改已经存在的容器——注册表、游戏路径、快捷方式全部还是旧的。请在「容器」页<b>长按删除旧容器</b>，再点 <b>+</b> 新建一次。</div>
+
+<h2>一、v4 修了什么（针对「点图标黑屏一下就退回快捷方式」）</h2>
+<table>
+<tr><th>问题</th><th>原因</th><th>v4 处理</th></tr>
+<tr><td><b>Wine 注册表缺 Blizzard 项</b><br><span class="tag t-red">主因</span></td><td>3DM 绿色版在 PC 上能跑，靠的是宿主 Windows 注册表里已有的 <code>Blizzard Entertainment\Diablo II</code>，或由 D2Loader 绕过。手机容器是全新的 Wine，<code>user.reg</code> 里完全没有 <code>InstallPath</code> / <code>Save Path</code> / <code>CDKey</code>，1.13c 启动读不到就直接退出</td><td>在容器模板的 <code>user.reg</code> 与 <code>system.reg</code> 预写这些键（HKLM 另补 Wow6432Node 视图），并预建 <code>Save</code> 目录</td></tr>
+<tr><td><b>错误框被吞掉</b></td><td>旧参数里的 <code>-nonotify</code> 是「关闭错误信息报警」，崩溃时不弹任何提示，只表现为黑屏一下退回，无法判断原因</td><td>全部快捷方式去掉 <code>-nonotify</code> 与 <code>-notitle</code>；现在若出错会弹出 Wine 错误框，把框里的文字记下来即可定位</td></tr>
+<tr><td><b>游戏路径带空格和括号</b></td><td>旧路径 <code>C:\Program Files (x86)\Diablo II</code>，Winlator 的 <code>winhandler.exe</code> 对空格用 <code>\ </code> 转义，但 <code>(x86)</code> 容易被命令行解析当成控制字符</td><td>一体化版游戏目录改为 <code>C:\DiabloII</code>（无空格无括号）</td></tr>
+<tr><td><b>启动器只有 D2Loader 一种</b></td><td>D2Loader / PlugY 都靠跨进程内存注入 Game.exe，在 Wine + Box64 wow64 下最容易失败（PC 上常见 "read process memory failed"）。而原版启动脚本既有 PlugY 也有 Game.exe</td><td>预置 5 个编号快捷方式，覆盖主程序直连、PlugY、D2Loader、无 -direct、D2DX 五条路径，见第三节</td></tr>
+</table>
+
+<div class="note"><b>另外说明：</b>PC 版 <code>Game.exe</code> 是 32 位 x86 Win32 程序、无源码，无法编译成 ARM 原生应用。本 APK 是把 Winlator（Wine + Box64 + PRoot）改造成专用客户端，在手机上以兼容层运行 PC 版，画面、存档、Mod 与电脑版一致。高清补丁是外挂文件（<code>glide3x.dll</code> 等），不带 <code>-3dfx</code> 走原版渲染路径是允许的，不影响启动。</div>
+
+<h2>二、快速开始</h2>
+
+<div class="danger"><b>⚠ 打开 App 后「快捷方式」页是空的？</b>这是正常现象。「快捷方式」页只显示<b>已创建容器</b>里的桌面文件，首次启动只装 Wine 运行环境、<b>不会自动创建容器</b>。关键顺序：先建容器 → 等解压完成 → 再回「快捷方式」页。</div>
+
+<h3>一体化版（推荐）</h3>
+<ol>
+<li>把一体化 APK 拷到手机安装；系统提示"未知来源"时允许一次。</li>
+<li>打开「暗黑破坏神II 1.13c」，等首次初始化解压 Wine 环境（约 1–3 分钟，保持亮屏）。</li>
+<li><b>切到「容器」页 → 点 + →「新建容器」</b>，分辨率 <code>800x600</code>，其余默认。要展开约 1 GB 游戏本体，<b>等创建完成提示出现</b>（2–8 分钟），中途别切后台或锁屏；手机留 ≥ 3 GB。</li>
+<li>回「快捷方式」页，会看到 <b>01～05 五个图标</b>，<b>从 01 开始按顺序点</b>，哪个能进游戏以后就固定用哪个。</li>
+</ol>
+<p style="color:var(--sub);font-size:13px">游戏文件位置：一体化版 <code>C:\DiabloII</code>，轻量版 <code>D:\DiabloII</code>；存档在 <code>...\DiabloII\Save\</code>，与 PC 版通用。</p>
+
+<h3>轻量版（新建容器秒完成，最稳）</h3>
+<ol>
+<li>安装轻量版 APK；把 <code>DiabloII_数据包.zip</code> 解压出 <code>DiabloII</code> 文件夹，整个放到手机 <code>Download/DiabloII</code>（文件夹里直接能看见 <code>Game.exe</code>）。</li>
+<li>也可用数据线一键完成：<code>python port/scripts/deploy.py</code>（需 USB 调试）。</li>
+<li>「容器」页点 <b>+</b> →「新建容器」（800x600）。轻量版模板仅约 7 MB，几秒完成。Winlator 默认把 <b>D: 盘映射到手机 Download</b>，所以游戏路径是 <code>D:\DiabloII</code>。</li>
+<li>回「快捷方式」页，同样从 <b>01</b> 开始逐个点。</li>
+</ol>
+
+<h2>三、五个启动图标，按编号试</h2>
+<p style="color:var(--sub);font-size:13px">Winlator 的快捷方式名直接取 <code>.desktop</code> 文件名，所以用 ASCII 编号命名，方便口头反馈「我试到 03 了」。</p>
+<table>
+<tr><th>图标名</th><th>可执行文件 / 参数</th><th>为什么准备这一条</th></tr>
+<tr><td><b>01-Game-direct-w</b><br><span class="tag t-ok">先点这个</span></td><td><code>Game.exe -direct -w</code></td><td>直连游戏主程序，完全不做进程注入，兼容层下成功率最高；<code>-direct</code> 保证中文，<code>-w</code> 窗口模式</td></tr>
+<tr><td>02-PlugY-direct-w</td><td><code>PlugY.exe -direct -w</code></td><td>PC 版整合包既定的启动方式（大箱子、共享仓库）。<code>PlugY.ini</code> 的 <code>Param=-direct</code> 已配好</td></tr>
+<tr><td>03-D2Loader-direct-w</td><td><code>D2Loader.exe -direct -w</code></td><td>v3 用的免 CD 加载器，保留作对照（已去掉会吞错误的 <code>-nonotify</code>）</td></tr>
+<tr><td>04-Game-w-only</td><td><code>Game.exe -w</code></td><td>不带 <code>-direct</code>，用于判断崩溃是否由中文 <code>Data\</code> 目录引起；界面会变英文属正常</td></tr>
+<tr><td>05-Game-3dfx-direct-w</td><td><code>Game.exe -3dfx -direct -w</code></td><td>PC 版 D2DX 高清渲染路径。Wine 下需 <code>dxgi.dll</code>/<code>d3d11.dll</code>，多数机型会崩，仅作最后对照</td></tr>
+</table>
+<div class="note"><b>参数三条铁律：</b><br>
+<code>-direct</code> <b>必须加</b>——中文版从 <code>Data\</code> 加载汉化，去掉会变英文/乱码；<br>
+<code>-txt</code> <b>绝对不能加</b>——这个破解版加了该参数会在片头后直接退出；<br>
+<code>-nonotify</code> <b>绝对不能加</b>——它会屏蔽错误弹窗，让崩溃原因不可见。<br>
+五条快捷方式都已按此配好，正常情况无需自己改参数。</div>
+
+<h2>四、容器参数（按手机芯片选）</h2>
+<table>
+<tr><th>项目</th><th>通用保守值</th><th>骁龙 / Adreno</th><th>天玑 / Mali</th><th>麒麟 / 鸿蒙</th></tr>
+<tr><td>分辨率</td><td>800x600</td><td>800x600，流畅后可试 960x544</td><td>800x600</td><td>800x600</td></tr>
+<tr><td>图形驱动</td><td>VirGL</td><td>Turnip / Turnip+Zink</td><td>VirGL，部分机型试 Vortek</td><td>VirGL；必要时换 GlibC / CMod 分支</td></tr>
+<tr><td>DX 转译</td><td>WineD3D</td><td>WineD3D</td><td>WineD3D</td><td>WineD3D</td></tr>
+<tr><td>Box64 预设</td><td><b>Stability</b></td><td>跑通后换 Performance</td><td>Stability</td><td>Stability</td></tr>
+<tr><td>音频驱动</td><td>PulseAudio</td><td>PulseAudio</td><td>PulseAudio</td><td>PulseAudio</td></tr>
+<tr><td>显存</td><td>2048 MB</td><td>4096 MB（8GB 内存机型）</td><td>2048 MB</td><td>2048 MB</td></tr>
+<tr><td>Windows 版本</td><td>Windows 7</td><td>Windows 7</td><td>Windows XP</td><td>Windows XP</td></tr>
+<tr><td>环境变量</td><td colspan="4">仍闪退可在容器「环境变量」里加 <code>MESA_EXTENSION_MAX_YEAR=2003</code>（老游戏按 2003 年前的图形接口写，新驱动暴露太多接口会让它选错路径）</td></tr>
+</table>
+<p style="color:var(--sub);font-size:13px">一次只改一个参数并做记录。快捷方式的 <code>[Extra Data]</code> 已写好 800x600 / VirGL / WineD3D，会覆盖容器默认值；Box64 预设需要在「容器 → 设置 → 高级」里改。</p>
+
+<h2>五、排障</h2>
+<table>
+<tr><th>现象</th><th>处理</th></tr>
+<tr><td><b>点击游戏图标黑屏一下，退回「快捷方式」页</b></td><td><b>先确认已覆盖安装 v4 且删掉旧容器重建</b>（v4 的注册表与新路径只在新建容器时生效）。然后按 <b>01 → 05</b> 顺序逐个点。v4 已去掉 <code>-nonotify</code>，若再次失败<b>应会弹出 Wine 错误框</b>——请把框里的文字抄给我，那是最直接的证据。同时把容器 Box64 预设改成 <b>Stability</b> 再试一次</td></tr>
+<tr><td><b>弹窗提示缺 CD / 请输入 CD-Key / 找不到安装路径</b></td><td>注册表没生效：确认用的是 v4 且容器是新建的。也可在容器里用「注册表编辑器」检查 <code>HKEY_CURRENT_USER\Software\Blizzard Entertainment\Diablo II</code> 是否有 <code>InstallPath</code></td></tr>
+<tr><td><b>「快捷方式」页空白</b></td><td>没创建容器。到「容器」页点 <b>+</b> 新建，等解压完成再回来；若已有容器，长按删除后重建。v4 的空列表文案已是中文指引</td></tr>
+<tr><td>新建容器成功但游戏目录是空的</td><td>v2 及更早版本的缺陷（模板缺目录条目导致 Java 解压中途失败并删掉整个容器），v3 起已修复。校验报告里 <code>template_missing_parents=0</code> 表示已修好</td></tr>
+<tr><td>新建容器一直转圈 / 创建失败</td><td>一体化版需展开约 1 GB 模板：手机留 ≥ 3 GB、保持亮屏不切后台；反复失败改用<b>轻量版</b>（模板 7 MB，几秒完成）+ 手动拷数据包</td></tr>
+<tr><td>黑屏 / 花屏（能进游戏但画面异常）</td><td>换图形驱动（VirGL ↔ Turnip/Zink）；容器分辨率固定 800x600；不要加 <code>-3dfx</code>（除非在试 05）</td></tr>
+<tr><td>界面变英文 / 中文乱码</td><td>漏了 <code>-direct</code>，或 <code>Data\</code> 目录没一起拷过去</td></tr>
+<tr><td>片头后直接退出</td><td>启动参数里含 <code>-txt</code>，去掉。本包已移除视频 MPQ，正常情况下游戏会跳过片头</td></tr>
+<tr><td>没有声音 / 爆音</td><td>PulseAudio 延迟调到 90ms；仍不行临时加 <code>-ns</code> 静音启动</td></tr>
+<tr><td>帧率低、发热</td><td>降分辨率、关后台、Box64 改 Performance、避免边充边玩</td></tr>
+</table>
+<div class="danger"><b>反馈时请给我这三点</b>，能一次定位：①试到哪个编号（01～05）；②是否有错误弹窗、原文是什么；③手机芯片型号 + 容器里 Box64 预设档位。没有错误弹窗也没关系，说明是进程直接崩，我会改走日志抓取。</div>
+
+<div class="note"><b>兜底：手动抓控制台输出</b><br>
+如果 01～05 全部闪退且没有任何错误框，可在容器里手动新建一个指向 <code>C:\windows\system32\cmd.exe</code> 的快捷方式，启动参数填 <code>/k</code>。点开后会出现一个不会自动关闭的命令行窗口，在其中输入 <code>C:\DiabloII\Game.exe -direct -w</code>（轻量版用 <code>D:\DiabloII\Game.exe -direct -w</code>）并回车，Wine 的报错会直接打印在窗口里。把最后几行抄给我即可——这能区分「找不到 exe / 缺 DLL / 缺注册表 / 图形初始化失败」。</div>
+
+<h2>六、精简了什么</h2>
+<table>
+<tr><th>移除项</th><th>省下</th><th>影响</th></tr>
+<tr><td>D2Video.mpq / D2xVideo.mpq（过场动画）</td><td>约 527 MB</td><td>不看过场动画；经典版对视频缺失通常容错</td></tr>
+<tr><td>D2Music.mpq / D2xMusic.mpq（背景音乐）</td><td>约 381 MB</td><td>无背景音乐，音效与语音保留</td></tr>
+<tr><td>PC 高清宽屏补丁配置、修改器、补丁备份、卸载器、日志</td><td>约 40 MB</td><td>避免 Wine 下黑屏；源目录未改动</td></tr>
+<tr><td><b>合计</b></td><td colspan="2">2.0 GB → 1.04 GB（508 个文件）</td></tr>
+</table>
+<p style="color:var(--sub);font-size:13px">若错误弹窗提到视频/动画文件，可用 <code>python port/scripts/prepare_game.py --include-video</code> 重新生成完整包再重跑 <code>patch_apk.py</code>。MANIFEST.json 含每个文件的 SHA256，可校验传输完整性。</p>
+
+<h2>七、合规声明</h2>
+<div class="danger">
+本 APK 仅供<b>个人自用</b>：<br>
+1. 内含 Winlator 11.2.0（LGPL-2.1）、Wine、Box64/Box86、Mesa、DXVK 等开源组件，许可与源码获取方式见随包 <code>NOTICE.txt</code>。改造后的包若对外提供，需履行 LGPL 的源码提供与许可告知义务。<br>
+2. 《暗黑破坏神II》及其全部游戏数据（MPQ、DLL、文本、音视频）版权归暴雪娱乐及权利人所有。本包未获得授权，<b>不得分发、上传、共享或用于任何商业用途</b>；建议以本人合法持有的正版安装文件替换。<br>
+3. 源目录为第三方绿色版，打包仅限本机个人使用，请勿再传播。
+</div>
+
+<h2>八、工程文件</h2>
+<table>
+<tr><th>路径</th><th>作用</th></tr>
+<tr><td>port/scripts/prepare_game.py</td><td>从源目录生成精简游戏包 + 启动配置</td></tr>
+<tr><td>port/scripts/patch_apk.py</td><td>改造 Winlator、注入注册表/容器模板、回编译、对齐、签名</td></tr>
+<tr><td>port/scripts/verify_apk.py</td><td>离线校验（注册表、路径、参数、目录完整性、签名结构）</td></tr>
+<tr><td>port/scripts/check_desktop_exec.py</td><td>验证 .desktop 的 Exec 路径转义（关键）</td></tr>
+<tr><td>port/scripts/zh_strings.py / make_icon.py</td><td>全中文词表 / 多密度启动图标</td></tr>
+<tr><td>port/scripts/deploy.py</td><td>PC 端 adb 一键部署（轻量版）</td></tr>
+<tr><td>port/dist/校验报告.json / 构建报告.json</td><td>逐项校验结果 / 构建元数据</td></tr>
+</table>
+
+<footer>生成环境：Windows · JDK 17 · Android SDK 35 / build-tools 35.0.0 · apktool 2.12.1 · zstandard 0.23 · 自签名证书（v1+v2+v3），安装时需允许"未知来源"。</footer>
+</div></body></html>

@@ -1,0 +1,64 @@
+exetoapk安卓wine模拟器汉化 · 第三方组件与许可证声明
+第三方组件与许可证声明
+================================================================
+
+本 APK 是在 Winlator 11.2.0 官方发行包基础上做资源与数据层面的改造
+（应用名称、启动图标、容器模板内容），未修改其 Java / Native 代码逻辑。
+包名保持 com.winlator，以避免破坏其 JNI 符号引用。
+
+一、开源组件
+----------------------------------------------------------------
+1) Winlator 11.2.0
+   项目：https://github.com/brunodev85/winlator
+   应用源码：https://github.com/brunodev85/winlator-app
+   许可：LGPL-2.1（完整许可文本见随包 Winlator-LICENSE.txt）
+   官方发行包：https://github.com/brunodev85/winlator/releases/tag/v11.2.0
+
+2) Wine / Wine Mono
+   项目：https://www.winehq.org/   许可：LGPL-2.1 及兼容许可
+
+3) Box86 / Box64 (ptitseb)
+   项目：https://github.com/ptitseb/box64   许可：MIT
+
+4) PRoot
+   项目：https://github.com/proot-me/proot   许可：GPL-2.0
+
+5) Mesa 3D / Turnip / Zink / VirGL
+   项目：https://www.mesa3d.org/   许可：MIT 及兼容许可
+
+6) DXVK / VKD3D / D8VK / CNC DDraw
+   项目：https://github.com/doitsujin/dxvk 等   许可：zlib / LGPL 等
+
+7) zstd-jni、xz、commons-compress、AndroidX / Material Components
+   许可：BSD-3 / Apache-2.0 / 公有领域等
+
+以上组件的完整源代码可从各项目官方仓库获取。依据 LGPL-2.1 第 6 条，
+如对外提供本改造包，须一并提供相应库的源代码或书面要约，并保留本声明。
+
+二、二进制内容 / 游戏数据
+----------------------------------------------------------------
+本仓库 Release 提供的「轻量版」APK **不包含任何游戏或商业软件数据**
+（无 MPQ / EXE / DLL / 字体 / 音视频 / CD-KEY），仅包含 Winlator 官方
+运行时与本项目添加的中文资源、示例快捷方式、容器模板配置。
+
+容器内预置的 5 个 .desktop 只是路径示例，指向 D:////DiabloII////*.exe；
+若设备中没有对应文件，点击它们不会启动任何程序。使用者须自行准备
+合法取得的程序文件，并自行修改快捷方式路径。
+
+《暗黑破坏神II》等第三方程序及其数据文件版权归各自权利人所有。
+本项目未提供任何授权，亦未进行逆向工程。内置游戏数据的一体化版本
+与独立数据包 **不在本仓库发布，禁止公开分发**。
+
+三、构建工具（仅在 PC 端使用，不随 APK 分发）
+----------------------------------------------------------------
+Microsoft OpenJDK 17、Android SDK Build-Tools 35.0.0（aapt2 / zipalign /
+apksigner）、Apktool 2.12.1、Python 3.13 + zstandard 0.23。
+
+四、签名
+----------------------------------------------------------------
+本 APK 使用工程内自建的调试证书自签名（v1 + v2 + v3）。
+证书与口令不随本仓库提供，使用者需自行生成并用 --ks 指定。
+非官方签名，安装时 Android 会要求允许"未知来源"。
+如更换签名，先前的容器数据将无法直接沿用。
+
+生成时间：2026-11-08
