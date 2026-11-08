@@ -27,7 +27,11 @@
 
 ## 下载与安装
 
-从本仓库 **Releases** 下载 `exetoapk安卓wine模拟器汉化.apk`（153.8 MB），校验值见 [`SHA256SUMS.txt`](SHA256SUMS.txt)。
+从本仓库 **Releases** 下载 `exetoapk-android-wine-zh.apk`（153.8 MB，SHA-256 见 [`SHA256SUMS.txt`](SHA256SUMS.txt)）。
+
+> GitHub 会把附件名里的汉字清理成点号，所以 Release 附件用 ASCII 名；
+> 安装后桌面/应用列表里显示的名称仍是中文的「exetoapk安卓wine模拟器汉化」。
+> 本地自行构建出的 APK 文件名同样是中文名，内容与 Release 附件完全一致。
 
 1. 允许「安装未知来源应用」；已装官方 Winlator 的先卸载。
 2. 首次打开 → **容器（Containers）** 页 → 右上角 `+` 新建容器，等待解压完成。

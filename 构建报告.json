@@ -3,11 +3,12 @@
   "base": "Winlator 11.2.0 (LGPL-2.1)",
   "package": "com.winlator",
   "version": "11.2 / v4 / rename-2026-11-08",
-  "artifact": "exetoapk安卓wine模拟器汉化.apk",
+  "artifact": "exetoapk-android-wine-zh.apk",
   "size_bytes": 161257249,
   "size_mb": 153.8,
   "sha256": "32d51edee1f980a7952fdd875dbb48d44acc26ef90a680a7a8e0f37ee136d1ef",
   "signing": "self-signed v1(JAR:false) + v2 + v3",
   "contains_game_data": false,
-  "verify": "校验报告.json (match=true)"
+  "verify": "校验报告.json (match=true)",
+  "release_asset": "exetoapk-android-wine-zh.apk"
 }

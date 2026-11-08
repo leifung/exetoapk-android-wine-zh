@@ -25,7 +25,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PAYLOAD = ROOT / "github"
 DIST = ROOT / "dist"
-APK_NAME = "exetoapk安卓wine模拟器汉化.apk"
+APK_LOCAL = "exetoapk安卓wine模拟器汉化.apk"      # 本地构建产物（应用显示名同名）
+# GitHub 会把 Release 附件名里的非 ASCII 字符清理成点号（中文名会变成 exetoapk.wine.apk），
+# 因此附件统一用规范 ASCII 名，并在 README / RELEASE_NOTES 中写明。
+ASSET_NAME = "exetoapk-android-wine-zh.apk"
 REPO = os.environ.get("GITHUB_REPO", "exetoapk-android-wine-zh")
 TAG = "v1.0.0"
 RELEASE_TITLE = "exetoapk安卓wine模拟器汉化 v1.0"
@@ -132,7 +135,7 @@ class Progress:
 
 
 def upload_asset(owner: str, repo: str, rel: dict) -> dict:
-    apk = DIST / APK_NAME
+    apk = DIST / APK_LOCAL
     if not apk.exists():
         raise FileNotFoundError(apk)
     size = apk.stat().st_size
@@ -143,15 +146,17 @@ def upload_asset(owner: str, repo: str, rel: dict) -> dict:
     sha = "sha256:" + h.hexdigest()
 
     assets, _ = api("GET", f"/repos/{owner}/{repo}/releases/{rel['id']}/assets?per_page=100")
-    old = next((a for a in assets if a["name"] == APK_NAME), None)
-    if old and old["size"] == size and (not old.get("digest") or old["digest"] == sha):
+    apk_assets = [a for a in assets if a["name"].lower().endswith(".apk")]
+    target = next((a for a in apk_assets if a["name"] == ASSET_NAME), None)
+    if (len(apk_assets) == 1 and target and target["size"] == size
+            and (not target.get("digest") or target["digest"] == sha)):
         print(">>> APK 附件已是最新，跳过上传", flush=True)
-        return old
-    if old:
-        print(">>> 删除同名旧附件，准备覆盖", flush=True)
-        api("DELETE", f"/repos/{owner}/{repo}/releases/assets/{old['id']}")
+        return target
+    for a in apk_assets:
+        print(f">>> 删除旧附件 {a['name']}", flush=True)
+        api("DELETE", f"/repos/{owner}/{repo}/releases/assets/{a['id']}")
 
-    q = urllib.parse.quote(APK_NAME, safe="")
+    q = urllib.parse.quote(ASSET_NAME, safe="")
     url = (f"https://uploads.github.com/repos/{owner}/{repo}/releases/"
            f"{rel['id']}/assets?name={q}")
     headers = {

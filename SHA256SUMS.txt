@@ -1,1 +1,1 @@
-32d51edee1f980a7952fdd875dbb48d44acc26ef90a680a7a8e0f37ee136d1ef  exetoapk安卓wine模拟器汉化.apk
+32d51edee1f980a7952fdd875dbb48d44acc26ef90a680a7a8e0f37ee136d1ef  exetoapk-android-wine-zh.apk

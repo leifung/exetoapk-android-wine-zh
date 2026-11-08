@@ -3,7 +3,8 @@
 基于 Winlator 11.2.0 的安卓 Wine/Box64 兼容层全中文定制版（轻量版）。
 
 - 应用名：`exetoapk安卓wine模拟器汉化`
-- 文件：`exetoapk安卓wine模拟器汉化.apk`（153.8 MB）
+- 应用显示名：`exetoapk安卓wine模拟器汉化`
+- 文件：`exetoapk-android-wine-zh.apk`（153.8 MB）
 - SHA-256：`32d51edee1f980a7952fdd875dbb48d44acc26ef90a680a7a8e0f37ee136d1ef`
 - 签名：自签名 v2 + v3（与官方 Winlator 同包名，不能共存，需先卸载官方版）
 - 内含：Wine/Box64 运行时、401 条中文界面词表、容器模板修复、5 个示例快捷方式
