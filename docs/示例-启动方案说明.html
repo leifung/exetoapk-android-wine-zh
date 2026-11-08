@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>暗黑破坏神II 1.13c 中文版 · 安卓专用 APK 使用说明</title>
+<title>exetoapk安卓wine模拟器汉化 · 示例启动方案说明</title>
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1c2230;--sub:#5b6577;--line:#e3e7ee;--accent:#8c2b22;--accent2:#b8863b;--ok:#1d7a4d;--warn:#b5651d}
 *{box-sizing:border-box}
@@ -32,7 +32,7 @@ footer{margin-top:40px;color:var(--sub);font-size:12px;border-top:1px solid var(
 </head>
 <body><div class="wrap">
 
-<h1>暗黑破坏神II 1.13c 中文版 · 安卓专用 APK</h1>
+<h1>exetoapk安卓wine模拟器汉化 · 示例启动方案说明</h1>
 <p class="lead">基于 Winlator 11.2.0 改造的专用客户端 · 内置 Wine / Box64 运行环境 · <b>全中文界面</b> · <b>v4 修复版（预置 Blizzard 注册表 + 无空格游戏路径 + 5 套启动方案）</b> · 2026-11-08</p>
 
 <div class="card">
@@ -52,7 +52,7 @@ footer{margin-top:40px;color:var(--sub);font-size:12px;border-top:1px solid var(
 <tr><th>问题</th><th>原因</th><th>v4 处理</th></tr>
 <tr><td><b>Wine 注册表缺 Blizzard 项</b><br><span class="tag t-red">主因</span></td><td>3DM 绿色版在 PC 上能跑，靠的是宿主 Windows 注册表里已有的 <code>Blizzard Entertainment\Diablo II</code>，或由 D2Loader 绕过。手机容器是全新的 Wine，<code>user.reg</code> 里完全没有 <code>InstallPath</code> / <code>Save Path</code> / <code>CDKey</code>，1.13c 启动读不到就直接退出</td><td>在容器模板的 <code>user.reg</code> 与 <code>system.reg</code> 预写这些键（HKLM 另补 Wow6432Node 视图），并预建 <code>Save</code> 目录</td></tr>
 <tr><td><b>错误框被吞掉</b></td><td>旧参数里的 <code>-nonotify</code> 是「关闭错误信息报警」，崩溃时不弹任何提示，只表现为黑屏一下退回，无法判断原因</td><td>全部快捷方式去掉 <code>-nonotify</code> 与 <code>-notitle</code>；现在若出错会弹出 Wine 错误框，把框里的文字记下来即可定位</td></tr>
-<tr><td><b>游戏路径带空格和括号</b></td><td>旧路径 <code>C:\Program Files (x86)\Diablo II</code>，Winlator 的 <code>winhandler.exe</code> 对空格用 <code>\ </code> 转义，但 <code>(x86)</code> 容易被命令行解析当成控制字符</td><td>一体化版游戏目录改为 <code>C:\DiabloII</code>（无空格无括号）</td></tr>
+<tr><td><b>游戏路径带空格和括号</b></td><td>旧路径 <code>C:\Program Files (x86)\Diablo II</code>，Winlator 的 <code>winhandler.exe</code> 对空格用 <code>\ </code> 转义，但 <code>(x86)</code> 容易被命令行解析当成控制字符</td><td>内置数据的版本（不在本仓库发布）游戏目录改为 <code>C:\DiabloII</code>（无空格无括号）</td></tr>
 <tr><td><b>启动器只有 D2Loader 一种</b></td><td>D2Loader / PlugY 都靠跨进程内存注入 Game.exe，在 Wine + Box64 wow64 下最容易失败（PC 上常见 "read process memory failed"）。而原版启动脚本既有 PlugY 也有 Game.exe</td><td>预置 5 个编号快捷方式，覆盖主程序直连、PlugY、D2Loader、无 -direct、D2DX 五条路径，见第三节</td></tr>
 </table>
 
@@ -62,18 +62,18 @@ footer{margin-top:40px;color:var(--sub);font-size:12px;border-top:1px solid var(
 
 <div class="danger"><b>⚠ 打开 App 后「快捷方式」页是空的？</b>这是正常现象。「快捷方式」页只显示<b>已创建容器</b>里的桌面文件，首次启动只装 Wine 运行环境、<b>不会自动创建容器</b>。关键顺序：先建容器 → 等解压完成 → 再回「快捷方式」页。</div>
 
-<h3>一体化版（推荐）</h3>
+<h3>内置数据的版本（不在本仓库发布）（推荐）</h3>
 <ol>
 <li>把一体化 APK 拷到手机安装；系统提示"未知来源"时允许一次。</li>
 <li>打开「暗黑破坏神II 1.13c」，等首次初始化解压 Wine 环境（约 1–3 分钟，保持亮屏）。</li>
 <li><b>切到「容器」页 → 点 + →「新建容器」</b>，分辨率 <code>800x600</code>，其余默认。要展开约 1 GB 游戏本体，<b>等创建完成提示出现</b>（2–8 分钟），中途别切后台或锁屏；手机留 ≥ 3 GB。</li>
 <li>回「快捷方式」页，会看到 <b>01～05 五个图标</b>，<b>从 01 开始按顺序点</b>，哪个能进游戏以后就固定用哪个。</li>
 </ol>
-<p style="color:var(--sub);font-size:13px">游戏文件位置：一体化版 <code>C:\DiabloII</code>，轻量版 <code>D:\DiabloII</code>；存档在 <code>...\DiabloII\Save\</code>，与 PC 版通用。</p>
+<p style="color:var(--sub);font-size:13px">游戏文件位置：内置数据的版本（不在本仓库发布） <code>C:\DiabloII</code>，轻量版 <code>D:\DiabloII</code>；存档在 <code>...\DiabloII\Save\</code>，与 PC 版通用。</p>
 
 <h3>轻量版（新建容器秒完成，最稳）</h3>
 <ol>
-<li>安装轻量版 APK；把 <code>DiabloII_数据包.zip</code> 解压出 <code>DiabloII</code> 文件夹，整个放到手机 <code>Download/DiabloII</code>（文件夹里直接能看见 <code>Game.exe</code>）。</li>
+<li>安装轻量版 APK；把自行取得的合法程序文件夹（示例为 <code>DiabloII</code>）整个放到手机 <code>Download/DiabloII</code>（文件夹里直接能看见 <code>Game.exe</code>）。本仓库不提供任何程序数据。</li>
 <li>也可用数据线一键完成：<code>python port/scripts/deploy.py</code>（需 USB 调试）。</li>
 <li>「容器」页点 <b>+</b> →「新建容器」（800x600）。轻量版模板仅约 7 MB，几秒完成。Winlator 默认把 <b>D: 盘映射到手机 Download</b>，所以游戏路径是 <code>D:\DiabloII</code>。</li>
 <li>回「快捷方式」页，同样从 <b>01</b> 开始逐个点。</li>
@@ -116,7 +116,7 @@ footer{margin-top:40px;color:var(--sub);font-size:12px;border-top:1px solid var(
 <tr><td><b>弹窗提示缺 CD / 请输入 CD-Key / 找不到安装路径</b></td><td>注册表没生效：确认用的是 v4 且容器是新建的。也可在容器里用「注册表编辑器」检查 <code>HKEY_CURRENT_USER\Software\Blizzard Entertainment\Diablo II</code> 是否有 <code>InstallPath</code></td></tr>
 <tr><td><b>「快捷方式」页空白</b></td><td>没创建容器。到「容器」页点 <b>+</b> 新建，等解压完成再回来；若已有容器，长按删除后重建。v4 的空列表文案已是中文指引</td></tr>
 <tr><td>新建容器成功但游戏目录是空的</td><td>v2 及更早版本的缺陷（模板缺目录条目导致 Java 解压中途失败并删掉整个容器），v3 起已修复。校验报告里 <code>template_missing_parents=0</code> 表示已修好</td></tr>
-<tr><td>新建容器一直转圈 / 创建失败</td><td>一体化版需展开约 1 GB 模板：手机留 ≥ 3 GB、保持亮屏不切后台；反复失败改用<b>轻量版</b>（模板 7 MB，几秒完成）+ 手动拷数据包</td></tr>
+<tr><td>新建容器一直转圈 / 创建失败</td><td>手机留 ≥ 3 GB 空间、保持亮屏不切后台；轻量版模板约 11 MB，正常几秒完成。反复失败长按删除该容器后重建</td></tr>
 <tr><td>黑屏 / 花屏（能进游戏但画面异常）</td><td>换图形驱动（VirGL ↔ Turnip/Zink）；容器分辨率固定 800x600；不要加 <code>-3dfx</code>（除非在试 05）</td></tr>
 <tr><td>界面变英文 / 中文乱码</td><td>漏了 <code>-direct</code>，或 <code>Data\</code> 目录没一起拷过去</td></tr>
 <tr><td>片头后直接退出</td><td>启动参数里含 <code>-txt</code>，去掉。本包已移除视频 MPQ，正常情况下游戏会跳过片头</td></tr>
